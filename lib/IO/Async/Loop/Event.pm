@@ -8,7 +8,7 @@ package IO::Async::Loop::Event;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use constant API_VERSION => '0.49';
 
 use base qw( IO::Async::Loop );
@@ -178,6 +178,8 @@ sub watch_signal
 {
    my $self = shift;
    my ( $name, $code ) = @_;
+
+   exists $SIG{$name} or croak "Unrecognised signal name $name";
 
    my $w = Event->signal( signal => $name, cb => $code );
    $self->{watch_sig}{$name} = $w;
